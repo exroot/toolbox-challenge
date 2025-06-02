@@ -1,0 +1,22 @@
+# Usa la imagen base de Node.js 16 con Alpine Linux 3.18
+FROM node:16-alpine3.18
+
+# Establece el directorio de trabajo dentro del contenedor
+WORKDIR /app
+
+# Copia el archivo package.json del frontend al directorio de trabajo
+COPY ./frontend/package.json /app
+
+# Instala las dependencias del proyecto usando yarn
+RUN yarn install
+
+# Copia el resto de los archivos del frontend al directorio de trabajo
+# Asegúrate de que este COPY no sobrescriba el .env que acabas de copiar si frontend/.env existe.
+# Si frontend/.env no existe y solo usas .env.example, esto está bien.
+COPY ./frontend .
+
+# Expone el puerto 3000, que es donde se ejecutará la aplicación frontend
+EXPOSE 3000
+
+# Define el comando para iniciar la aplicación cuando el contenedor se ejecute
+CMD ["npm", "start"]

@@ -1,0 +1,24 @@
+# Usa la imagen base de Node.js 14 con Alpine Linux
+FROM node:14-alpine
+
+# Establece el directorio de trabajo dentro del contenedor
+WORKDIR /app
+
+# Copia el archivo package.json del backend al directorio de trabajo
+COPY ./backend/package.json /app
+
+# Instala las dependencias del proyecto usando yarn
+RUN yarn install
+
+# Copia el archivo .env.example como .env para que el backend acceda a las variables de entorno
+# Asegúrate de que .env.example esté en el directorio 'backend' de tu contexto de construcción.
+COPY ./backend/.env.example ./.env
+
+# Copia el resto de los archivos del backend al directorio de trabajo
+COPY ./backend .
+
+# Expone el puerto 4000, que es donde se ejecutará la aplicación backend
+EXPOSE 4000
+
+# Define el comando para iniciar la aplicación cuando el contenedor se ejecute
+CMD ["npm", "start"]
